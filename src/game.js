@@ -6,7 +6,7 @@ console.info("[Bronx Fighter] COMBATE V6: SUA sala em destaque, seleção manual
 import {createLanInviteUi,chooseLanInviteUrl,normalizeRoomCode,getJoinCodeFromUrl} from "./lan-v5.js";
 import {createOwnRoomPanel} from "./room-v6.js";
 import {selectArcadeFighter,resolveArcadeMatchMode} from "./arcade-v6.js";
-import {lanEndpoint,chooseOnlineInviteUrl,onlineApiConfigured} from "./online-v8.js";
+import {lanEndpoint,chooseOnlineInviteUrl,onlineApiConfigured} from "./online-v8.js?v=20261016-bootfix";
 const FIGHTERS=[
 {id:"daniel",name:"Daniel",title:"O tecelão do Bronx",bio:"Rápido no jab e preciso no alcance. Prende o rival com uma teia de aço.",color:"#54bbf2",special:"Teia de Aço"},
 {id:"diana",name:"Diana",title:"A tempestade",bio:"Movimento leve, ataques baixos e spray explosivo.",color:"#ec4cba",special:"Spray Explosivo"},
@@ -643,6 +643,8 @@ function startApp(){
  window.addEventListener("pointerdown",()=>{enterArcadeSession();unlockAudio();},{once:true});
  window.addEventListener("gamepadconnected",gamepadStatus);window.addEventListener("gamepaddisconnected",gamepadStatus);
  resizeCanvas();requestAnimationFrame(draw);requestAnimationFrame(loop);
+  window.__BRONX_BOOT_READY__=true;
+  console.info("[Bronx Fighter] MENU INICIADO COM SUCESSO · BOOTFIX 20261016");
   const urlCode=getJoinCodeFromUrl(location);
   if(urlCode){
    Promise.resolve().then(async()=>{

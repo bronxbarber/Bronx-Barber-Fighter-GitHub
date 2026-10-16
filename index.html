@@ -41,7 +41,7 @@
         <div class="online-content">
           <span class="eyebrow">MULTIPLAYER · INTERNET</span>
           <h1>VERSUS ONLINE</h1>
-          <p>Este modo conecta dois aparelhos na mesma rede Wi‑Fi quando o servidor local está ativo.</p>
+          <p>Jogue pela internet com um amigo. Crie uma sala e compartilhe o código ou o link, mesmo em redes diferentes.</p>
           <section id="bronxOwnRoom" class="bronx-my-room" data-room-state="waiting" aria-live="polite">
             <p class="bronx-my-room-heading">ESTE É O CÓDIGO DA SUA SALA</p>
             <output id="bronxOwnRoomCode" class="bronx-my-room-code" aria-label="Nenhuma sala criada">— — — — — — — —</output>
@@ -179,6 +179,32 @@
   <div id="orientationBlocker" class="orientation-blocker" hidden role="dialog" aria-modal="true" aria-labelledby="orientationTitle">
     <div class="orientation-card"><span class="orientation-icon" aria-hidden="true">⟳</span><p class="eyebrow">BRONX · BARBER FIGHTER</p><h1 id="orientationTitle">Vire o celular</h1><p>Este jogo foi feito para a tela horizontal. Gire o aparelho para continuar.</p></div>
   </div>
-  <script type="module" src="./src/game.js"></script>
+  <script>
+/* Diagnóstico de inicialização: só aparece se o menu não conseguir iniciar. */
+(function(){
+  var lastError="";
+  window.__BRONX_BOOT_READY__=false;
+  window.addEventListener("error",function(event){
+    if(!window.__BRONX_BOOT_READY__ && event.message)lastError=String(event.message);
+  });
+  window.addEventListener("unhandledrejection",function(event){
+    if(!window.__BRONX_BOOT_READY__ && event.reason)lastError=String(event.reason.message||event.reason);
+  });
+  setTimeout(function(){
+    if(window.__BRONX_BOOT_READY__)return;
+    var panel=document.createElement("section");
+    panel.setAttribute("role","alert");
+    panel.id="bronx-boot-error";
+    panel.style.cssText="position:fixed;z-index:2147483647;bottom:12px;left:12px;right:12px;margin:auto;max-width:800px;padding:16px;border:2px solid #e7ad44;border-radius:10px;background:#18171b;color:white;font:15px/1.5 Arial,sans-serif;box-shadow:0 10px 45px #000e;";
+    var heading=document.createElement("strong");heading.textContent="BRONX FIGHTER · ERRO DE INICIALIZAÇÃO";
+    var detail=document.createElement("p");detail.style.cssText="margin:8px 0;word-break:break-word";
+    detail.textContent=lastError||"O navegador não conseguiu iniciar o menu. Verifique a conexão e se os arquivos JavaScript foram publicados corretamente.";
+    var hint=document.createElement("small");hint.textContent="Faça uma captura desta mensagem e envie para corrigirmos o problema exato. Tente também Ctrl + Shift + R.";
+    panel.append(heading,detail,hint);
+    document.body.appendChild(panel);
+  },9000);
+})();
+</script>
+<script type="module" src="./src/game.js?v=20261016-bootfix"></script>
 </body>
 </html>
