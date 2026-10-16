@@ -371,7 +371,7 @@ body.orientation-blocked .app-shell{filter:blur(5px);pointer-events:none;user-se
 .touch-stick{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:clamp(116px,31vh,154px);aspect-ratio:1;pointer-events:auto;touch-action:none;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 8px 16px rgba(0,0,0,.48))}
 .touch-stick-base{position:absolute;inset:0;border:1px solid rgba(231,238,246,.26);border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(55,72,90,.76),rgba(10,17,26,.84) 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 7px rgba(9,15,23,.34),0 0 0 1px rgba(0,0,0,.38);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
 .touch-stick-base:before{content:"";position:absolute;inset:17%;border:1px solid rgba(226,235,245,.12);border-radius:50%;background:linear-gradient(90deg,transparent 49.6%,rgba(231,238,246,.1) 49.8%,rgba(231,238,246,.1) 50.2%,transparent 50.4%),linear-gradient(0deg,transparent 49.6%,rgba(231,238,246,.1) 49.8%,rgba(231,238,246,.1) 50.2%,transparent 50.4%)}
-.touch-stick-knob{position:absolute;z-index:2;left:50%;top:50%;width:42%;aspect-ratio:1;transform:translate3d(0,0,0);border:1px solid rgba(255,255,255,.46);border-radius:50%;background:radial-gradient(circle at 34% 27%,rgba(137,159,179,.96),rgba(45,60,75,.97) 58%,rgba(18,27,38,.98));box-shadow:inset 0 2px 2px rgba(255,255,255,.2),0 5px 13px rgba(0,0,0,.45);transition:box-shadow .12s ease}
+.touch-stick-knob{position:absolute;z-index:2;left:50%;top:50%;width:42%;aspect-ratio:1;transform:translate3d(-50%,-50%,0);border:1px solid rgba(255,255,255,.46);border-radius:50%;background:radial-gradient(circle at 34% 27%,rgba(137,159,179,.96),rgba(45,60,75,.97) 58%,rgba(18,27,38,.98));box-shadow:inset 0 2px 2px rgba(255,255,255,.2),0 5px 13px rgba(0,0,0,.45);transition:box-shadow .12s ease}
 .touch-stick.active .touch-stick-knob{border-color:rgba(255,218,145,.8);box-shadow:inset 0 2px 2px rgba(255,255,255,.22),0 0 18px rgba(231,173,68,.32),0 5px 13px rgba(0,0,0,.45)}
 .touch-stick-label{position:absolute;left:0;right:0;bottom:10%;z-index:3;text-align:center;color:rgba(240,237,229,.58);font:800 7px/1 system-ui,sans-serif;letter-spacing:.17em;pointer-events:none}
 .touch-actions{--touch-action-size:clamp(52px,var(--touch-size,58px),74px);position:absolute;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,var(--touch-action-size));grid-template-rows:repeat(3,var(--touch-action-size));gap:clamp(4px,1.2vh,8px);transform:none;filter:drop-shadow(0 8px 16px rgba(0,0,0,.46));pointer-events:auto}
@@ -385,3 +385,65 @@ body.orientation-blocked .app-shell{filter:blur(5px);pointer-events:none;user-se
 #cinemaScreen .cinema-top{position:relative;z-index:2;flex:0 0 auto}
 #cinemaScreen video{flex:1 1 auto;width:100%;height:calc(100% - 58px);max-width:100%;max-height:calc(100dvh - 70px);min-height:0;object-fit:contain;margin:auto}
 #cinemaScreen .cinema-fallback{z-index:3}
+
+/* Keep the fight/ready action visible while the fighter roster scrolls. */
+.select-screen.active{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}
+.select-topline{flex:0 0 48px}
+.select-layout,.select-layout.two-player{flex:1 1 auto;height:auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.select-actions{position:relative;z-index:5;display:flex;flex:0 0 auto;align-items:center;justify-content:center;gap:10px;min-height:66px;padding:8px 12px max(8px,env(safe-area-inset-bottom));border-top:1px solid rgba(231,173,68,.22);background:linear-gradient(180deg,rgba(7,10,15,.9),rgba(7,10,15,.99));box-shadow:0 -8px 24px rgba(0,0,0,.24)}
+.select-actions .primary-button.wide{width:min(320px,100%);min-height:48px;margin:0;padding:13px 18px}
+.select-actions [hidden]{display:none!important}
+.game-fullscreen-button[hidden]{display:none!important}
+body.playing .game-fullscreen-button{position:absolute;z-index:3;top:max(14px,env(safe-area-inset-top));right:max(62px,calc(env(safe-area-inset-right) + 54px));display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(4,8,12,.56);color:rgba(246,244,238,.86);font:24px/1 system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+body.playing .game-fullscreen-button:active{background:rgba(231,173,68,.9);color:#17120a}
+@media(pointer:fine){body.playing .game-fullscreen-button{display:none}}
+
+/* During a fight, treat touch gestures as game input instead of browser zoom. */
+body.playing,body.playing *{touch-action:none!important;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.playing #touchControls{touch-action:none}
+@media(max-width:720px){
+ .select-screen.active{padding:0 8px 0}
+ .select-topline{flex-basis:44px;min-height:44px}
+ .select-layout,.select-layout.two-player{grid-template-rows:clamp(112px,22dvh,165px) auto;align-content:start}
+ .select-actions{width:100%;min-height:72px;padding:8px 8px max(10px,env(safe-area-inset-bottom))}
+ .select-actions .primary-button.wide{width:100%;min-height:54px;border:1px solid rgba(255,236,196,.34);border-radius:9px;font-size:12px;letter-spacing:.1em;box-shadow:0 5px 18px rgba(231,173,68,.2)}
+ .select-help{display:none}
+ .roster-panel{justify-content:flex-start;padding:6px 0 12px}
+}
+
+/* BRONX V5: CTA de agendamento, código de convite e Versus com CPU. */
+.bronx-book-link{display:inline-flex;justify-content:center;align-items:center;box-sizing:border-box;min-height:43px;padding:11px 16px;background:linear-gradient(135deg,#eac16c,#ae782c);color:#18120c;text-align:center;text-decoration:none;font:900 11px/1.2 system-ui,sans-serif;letter-spacing:.06em;border:1px solid #f2d28e;border-radius:7px;box-shadow:0 4px 16px rgba(0,0,0,.42)}
+.bronx-book-link:hover,.bronx-book-link:focus-visible{filter:brightness(1.1);outline:2px solid #f2d28e;outline-offset:2px}
+.bronx-book-link[hidden]{display:none!important}
+.bronx-book-menu{margin:11px 10px 0;max-width:420px}
+.bronx-book-result{max-width:min(92vw,420px);margin:5px auto 0;background:linear-gradient(135deg,#ddb15a,#f2d18a)}
+.bronx-join-code-row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;align-items:center;margin:10px auto;color:#e9d3a8;font:800 11px/1.2 system-ui,sans-serif;letter-spacing:.08em}
+.bronx-join-code-row input{box-sizing:border-box;width:182px;max-width:100%;min-height:43px;border:1px solid #c7a564;border-radius:6px;background:#141d28;color:#ffe4a1;text-transform:uppercase;text-align:center;letter-spacing:.16em;font:900 17px/1.1 ui-monospace,SFMono-Regular,monospace}
+#lanChooseFighters[hidden]{display:none!important}
+.result-panel.game-over .bronx-book-link{min-width:min(260px,82vw)}
+@media(max-height:430px){.bronx-book-menu{min-height:30px;margin:3px 8px 0;padding:7px 10px;font-size:9px}.bronx-book-result{min-height:33px;padding:8px;font-size:10px}}
+/* END BRONX V5 */
+
+/* BRONX V6 — código real da SUA sala e seleção de adversário no Arcade */
+#bronxLanInviteOnline{display:none!important} /* One clear room-code card, not two competing codes. */
+.bronx-my-room{box-sizing:border-box;width:min(650px,100%);margin:16px auto 10px;padding:18px 14px;border:2px solid #f5cc78;border-radius:12px;background:linear-gradient(145deg,rgba(31,25,18,.98),rgba(8,14,23,.97));color:#fff0d5;text-align:center;box-shadow:0 4px 24px #000c}
+.bronx-my-room-heading{margin:0 0 9px;color:#ffda86;font:900 clamp(14px,2vw,20px)/1.2 system-ui,sans-serif;letter-spacing:.08em}
+.bronx-my-room-code{display:block;min-height:1.2em;padding:4px 0;color:#ffe6a3;font:900 clamp(30px,6vw,54px)/1.14 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.21em;text-shadow:0 0 24px #f1b65355;overflow-wrap:anywhere;user-select:all}
+.bronx-my-room[data-room-state="waiting"] .bronx-my-room-code{font-size:clamp(20px,3.7vw,35px);opacity:.65;letter-spacing:.1em}
+.bronx-my-room-hint{margin:9px auto;color:#fff3d6;font:650 clamp(11px,1.5vw,14px)/1.5 system-ui,sans-serif}
+.bronx-my-room-hint[data-warning="true"]{color:#ffbd91}
+.bronx-my-room-link{display:none;width:100%;box-sizing:border-box;padding:9px;background:#101d2b;color:#fff0da;border:1px solid #ad8952;border-radius:5px;text-align:center;font:12px/1.2 monospace}
+.bronx-my-room[data-room-state="created"] .bronx-my-room-link{display:block}
+.bronx-my-room-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:12px auto 0}
+.bronx-my-room-actions[hidden]{display:none!important}
+.bronx-my-room-actions button,.bronx-my-room-actions a{min-height:38px;padding:10px 12px;box-sizing:border-box;font-size:11px;border-radius:5px}
+.bronx-my-room-wa{display:inline-flex;align-items:center;justify-content:center;background:#246b40;color:white;border:1px solid #73c48d;font-weight:900;text-decoration:none}
+.bronx-my-room-wa[hidden]{display:none!important}
+.bronx-arcade-choose-mode{display:flex;flex-direction:column;gap:4px;margin:9px auto;padding:7px 10px;width:min(440px,95%);color:#eec778;background:rgba(10,15,22,.82);border:1px solid rgba(231,173,68,.3);border-radius:6px}
+.bronx-arcade-choose-mode[hidden]{display:none!important}
+.bronx-arcade-choose-mode label{font:800 12px/1.3 system-ui,sans-serif;cursor:pointer}
+.bronx-arcade-choose-mode small{font:600 10px/1.4 system-ui,sans-serif;color:#e4dcca}
+#selectP1,#selectP2{cursor:pointer}
+#selectP1.selected,#selectP2.selected{border-color:#ffcd62;box-shadow:0 0 0 2px #ffcd6277}
+@media(max-height:480px){.bronx-my-room{padding:10px;margin:5px auto}.bronx-my-room-heading{font-size:12px;margin-bottom:3px}.bronx-my-room-code{font-size:30px;letter-spacing:.14em}.bronx-my-room-hint{font-size:10px}.bronx-my-room-actions{margin:5px auto 0;gap:5px}.bronx-my-room-actions button,.bronx-my-room-actions a{min-height:30px;padding:6px 9px}.bronx-arcade-choose-mode{padding:4px;margin:3px auto}}
+/* END BRONX V6 */
