@@ -2,7 +2,7 @@
  * After you create the Render service, paste its PUBLIC https URL below.
  * Never paste API secrets or account tokens here: this file is publicly served.
  */
-export const ONLINE_API_URL = 'https://bronx-fighter-salas.onrender.com';
+eexport const ONLINE_API_URL = 'https://bronx-fighter-salas.onrender.com';
 export const GAME_PUBLIC_URL = 'https://bronxfigthergame.github.io/barberfighter/';
 
 export function onlineApiConfigured() {
