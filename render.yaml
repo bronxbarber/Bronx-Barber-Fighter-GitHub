@@ -10,6 +10,6 @@ services:
       - key: PYTHONUNBUFFERED
         value: '1'
       - key: BRONX_ALLOWED_ORIGINS
-        value: 'https://bronxfigthergame.github.io'
+        value: 'https://bronxbarber.github.io'
       - key: BRONX_GAME_URL
-        value: 'https://bronxfigthergame.github.io/barberfighter/'
+        value: 'https://bronxbarber.github.io/Bronx-Barber-Fighter-GitHub/'
